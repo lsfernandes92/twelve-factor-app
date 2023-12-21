@@ -101,4 +101,20 @@ Every release should have its unique identification associated, such as a timest
 
 The build process is initiated by developers when the code is pushed to an environment. In contrast, runtime execution can occur automatically, such as during a server reboot. Consequently, it's crucial to keep the run stage with as few moving parts as possible, as issues at this stage might prevent the app from running, especially during off-hours when support might not be readily available. The build stage can be more complex, as developers actively manage the deployment, keeping errors in the foreground.
 
+## VI. Processes
 
+### Execute the app as one or more stateless processes
+
+---
+
+The app operates within the execution environment as one or more processes.
+
+Consider the code as a stand-alone script, the execution environment as the developer's local machine with the installed language runtime, and the process launched via the command line, for example, `ruby my_file.rb`.
+
+**The Twelve-factor app dictates that processes should be stateless and share nothing.** Any additional data requiring persistence must be stored in a backing service, typically a database.
+
+However, the memory space or filesystem of the process can be utilized as a brief, single-transaction cache. For instance, downloading a large file, performing operations on it, and then storing the results of the operation in the database. Nonetheless, the Twelve-Factor app never assumes that anything cached in memory or on disk will be available for future requests or jobs, as future requests might be served by different processes.
+
+Moreover, any language-specific packaging that utilizes the filesystem as a cache for compiled assets violates the Twelve-Factor app. It is preferred to handle this during compilation in the build stage. *Tip: The Rails asset pipeline can be configured to package assets during the build stage.*
+
+Certain web systems rely on "sticky sessions" where user session data is cached in the memory of the app’s process, expecting subsequent requests from the same visitor to be routed to the same process. This practice also violates the Twelve-Factor app. Session state data is better suited for a datastore offering time expiration, such as Memcached or Redis.
