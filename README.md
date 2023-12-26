@@ -159,3 +159,27 @@ Efforts should be made to **minimize the startup time of processes.** Swift star
 
 Processes should also be resilient against abrupt termination, which could result from hardware failures. Although less common than graceful shutdowns with SIGTERM, such incidents can occur. An advisable strategy involves utilizing a robust queueing backend like Beanstalkd, which returns jobs to the queue upon client disconnection or timeouts. In any scenario, a twelve-factor app is structured to handle unexpected, non-graceful terminations. The crash-only design embodies this principle to its logical conclusion.
 
+## X. Dev/prod parity
+
+### Keep development, staging, and production as similar as possible
+
+---
+
+Historically, significant disparities have existed between development and production environments, manifesting in several ways:
+
+- The Time Gap: Code often takes days, weeks, or even months to reach production, whereas it should ideally be deployed within hours or minutes.
+- The Personnel Gap: Developers create code while DevOps engineers handle deployment. Ideally, developers would be closely engaged in deploying and observing its behavior in the production environment.
+- The Tools Gap: Local development setups might utilize stacks like Nginx, SQLite, and OS X, while production environments employ Apache, MySQL, and Linux. Let's keep development and production as similar as possible.
+
+**The Twelve-Factor app is engineered for continuous deployment, aiming to narrow the gap between these environments.**
+
+Developers adhering to **the twelve-factor principles resist the temptation to use different backing services in development versus production.** This stems from the appeal developers find in using lightweight services locally versus more robust ones in production. Discrepancies between these services often lead to minor incompatibilities, causing code that passed testing in dev or staging to fail in production. This discourages continuous deployment and results in considerable friction that incurs significant costs throughout an application's lifecycle. Additionally, modern packaging systems like `Homebrew` and `apt-get` have made installing and running modern backing services less challenging.
+
+Many programming languages offer libraries that streamline access to backing services, providing adapters for various service types. For instance, `ActiveRecord` for `Ruby/Rails` includes database adapters such as `MySQL`, `PostgreSQL`, and `SQLite`. While adapters to different backing services simplify porting to new services, it's essential for all deployments (developer environments, staging, production) to use the same type and version of each backing service.
+
+## Conclusion
+
+- Those rules doesn't make sense in small projects
+- Those rules are suggested for a better SaaS service, but they are not require.
+  You can apply the one that make sense to you or to your project.
+- It's better que know the factors just in case
