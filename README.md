@@ -118,3 +118,17 @@ However, the memory space or filesystem of the process can be utilized as a brie
 Moreover, any language-specific packaging that utilizes the filesystem as a cache for compiled assets violates the Twelve-Factor app. It is preferred to handle this during compilation in the build stage. _Tip: The Rails asset pipeline can be configured to package assets during the build stage._
 
 Certain web systems rely on "sticky sessions" where user session data is cached in the memory of the app’s process, expecting subsequent requests from the same visitor to be routed to the same process. This practice also violates the Twelve-Factor app. Session state data is better suited for a datastore offering time expiration, such as Memcached or Redis.
+
+## VII. Port binding
+
+### Export services via port binding
+
+---
+
+At times, the server functions as a web server container where the web app operates as a module within the container. For instance, a PHP app might run as a module inside Apache HTTPD, or Java apps might function within Tomcat.
+
+**The twelve-factor app is entirely self-contained** and doesn't depend on the runtime injection of a web server into the execution environment to establish a web-facing server. Instead, **the web app exports HTTP as a service by binding to a port**, which serves as a listening port for incoming requests. In a local environment, developers access the app by visiting `http://localhost:3000`. In a deployment environment, a routing layer manages the routing of requests from a public-facing hostname to the port-bound web processes.
+
+This is commonly achieved by using dependency declarations to incorporate the web server library into the app, such as using `Thin` for `Ruby`.
+
+Furthermore, this approach signifies that any service can be exported by port binding, awaiting incoming requests. It's important to note that by doing so, one app can serve as the backing service for another app.
