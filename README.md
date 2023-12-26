@@ -177,6 +177,27 @@ Developers adhering to **the twelve-factor principles resist the temptation to u
 
 Many programming languages offer libraries that streamline access to backing services, providing adapters for various service types. For instance, `ActiveRecord` for `Ruby/Rails` includes database adapters such as `MySQL`, `PostgreSQL`, and `SQLite`. While adapters to different backing services simplify porting to new services, it's essential for all deployments (developer environments, staging, production) to use the same type and version of each backing service.
 
+## XI. Logs
+
+### Treat logs as event streams
+
+---
+
+Logs offer insights into the behavior of a running app, typically stored in log files on the disk containing the app's outputs.
+
+They represent an aggregated, time-ordered stream of events occurring across running processes and backing services, registering each event on a single line. Logs flow continuously without a fixed start or end as long as the app operates.
+
+**A twelve-factor app doesn't concern itself with routing or storing its output stream.** Rather than managing log files, the focus is on directing processes and backing services to output logs to `stdout`.
+
+During local development, developers can observe logs in their terminal's foreground to monitor the app's behavior. In other environments like `test`, `staging`, or `production`, this is captured by the execution environment. All streams from the app, its processes, and backing services are directed to one or more final destinations for viewing and long-term storage, entirely managed by the execution environment.
+
+The app's event stream can be directed to a file or monitored in real-time using terminal-based tail commands. Importantly, it can also be sent to a log indexing and analysis system or a general-purpose data warehousing system like `Hadoop` or `Hive`. These systems offer significant power and flexibility for examining an app's behavior over time, including:
+
+- Find specific time events in the past;
+- Large-scale graphing of trends(such as the requests per minute);
+- Active alerting according to user-defined heuristics(such as an alert when the quantity of errors per minute exceeds a certain threshold)
+
+
 ## Conclusion
 
 - Those rules doesn't make sense in small projects
