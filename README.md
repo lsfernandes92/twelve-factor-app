@@ -145,3 +145,17 @@ Moreover, while individual processes can handle internal multiplexing via thread
 
 Furthermore, the text emphasizes that twelve-factor app processes should refrain from daemonizing or writing PID files. Instead, reliance on the operating system’s process manager (like systemd or cloud platform-based distributed process managers) or tools such as Foreman during development is encouraged. These tools effectively manage output streams, handle crashed processes, and address user-initiated restarts and shutdowns.
 
+## IX. Disposability
+
+### Maximize robustness with fast startup and graceful shutdown
+
+---
+
+**The Twelve-Factor app's processes are designed to be disposable, allowing them to be started or stopped at any moment.** This flexibility accelerates elastic scaling, rapid deployment of code or configuration changes, and ensures the resilience of production deployments.
+
+Efforts should be made to **minimize the startup time of processes.** Swift startups provide greater agility for the release process and scaling up, contributing to robustness as the process manager can easily transfer processes to new physical machines when needed.
+
+**Processes shut down gracefully when they receive a `SIGTERM`** signal from the process manager. In the case of a web process, this entails ceasing to listen on the service port (rejecting new requests), allowing ongoing requests to complete, and then exiting. For instance, in the case of a worker process, graceful shutdown involves returning the current job to the work queue. In RabbitMQ, a worker can send a NACK to accomplish this.
+
+Processes should also be resilient against abrupt termination, which could result from hardware failures. Although less common than graceful shutdowns with SIGTERM, such incidents can occur. An advisable strategy involves utilizing a robust queueing backend like Beanstalkd, which returns jobs to the queue upon client disconnection or timeouts. In any scenario, a twelve-factor app is structured to handle unexpected, non-graceful terminations. The crash-only design embodies this principle to its logical conclusion.
+
