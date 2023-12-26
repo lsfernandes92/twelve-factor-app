@@ -28,8 +28,8 @@ The codebase is a single repository or any set of repositories that share a root
 
 There exists a one-to-one correlation between the codebase and the app:
 
-* If there are multiple codebases, it does not qualify as a single codebase but rather constitutes a distributed system. Each component in a distributed system is considered an app, and each can individually adhere to the Twelve-Factor principles.
-* Having multiple apps sharing the same codebase violates the Twelve-Factor approach. The recommended solution is to modularize shared code into libraries that can be included through the dependency manager.
+- If there are multiple codebases, it does not qualify as a single codebase but rather constitutes a distributed system. Each component in a distributed system is considered an app, and each can individually adhere to the Twelve-Factor principles.
+- Having multiple apps sharing the same codebase violates the Twelve-Factor approach. The recommended solution is to modularize shared code into libraries that can be included through the dependency manager.
 
 Per app, there exists only one codebase, but numerous deployments of the app can exist. A deployment refers to a running instance of the app, which commonly includes instances in production, staging, testing, and an additional local instance for each developer.
 
@@ -59,9 +59,9 @@ The Twelve-Factor methodology also does not rely on the implicit existence of sy
 
 The app's configuration is everything that may vary between environments. This includes:
 
-* System resources like databases, Memcached, and backing services;
-* Credentials for external services such as Amazon S3 or Twitter;
-* Environment-specific values such as the hostname.
+- System resources like databases, Memcached, and backing services;
+- Credentials for external services such as Amazon S3 or Twitter;
+- Environment-specific values such as the hostname.
 
 The Twelve-Factor methodology strongly advocates for separating configuration from the code. This is primarily because configuration values may differ between environments while the code remains constant. A useful way to determine if configurations are properly extracted from the code is by considering the scenario of making the codebase open source. If the credentials need to be managed, the configurations might be compromised.
 
@@ -91,9 +91,9 @@ Resources can be attached to or detached from deployments at will. For instance,
 
 A codebase goes through several stages before transforming into an execution environment:
 
-* The **build stage** involves a process that converts the code repository into an executable bundle, known as the build. This stage, utilizing a root commit specified by the deployment process, retrieves vendor dependencies and compiles binaries and assets.
-* The **release stage** takes the output produced by the build stage and combines it with the deployment's configurations. The result of this combination creates a package ready for immediate execution within the execution environment.
-* The **run stage** (also referred to as "runtime") executes the app within the execution environment by launching a set of the app’s processes against a chosen release.
+- The **build stage** involves a process that converts the code repository into an executable bundle, known as the build. This stage, utilizing a root commit specified by the deployment process, retrieves vendor dependencies and compiles binaries and assets.
+- The **release stage** takes the output produced by the build stage and combines it with the deployment's configurations. The result of this combination creates a package ready for immediate execution within the execution environment.
+- The **run stage** (also referred to as "runtime") executes the app within the execution environment by launching a set of the app’s processes against a chosen release.
 
 **The Twelve-Factor app strictly emphasizes the separation between the build, release, and run stages.** For instance, making changes to the code at runtime is impossible, as there's no mechanism to propagate those changes back to the build stage.
 
@@ -115,6 +115,6 @@ Consider the code as a stand-alone script, the execution environment as the deve
 
 However, the memory space or filesystem of the process can be utilized as a brief, single-transaction cache. For instance, downloading a large file, performing operations on it, and then storing the results of the operation in the database. Nonetheless, the Twelve-Factor app never assumes that anything cached in memory or on disk will be available for future requests or jobs, as future requests might be served by different processes.
 
-Moreover, any language-specific packaging that utilizes the filesystem as a cache for compiled assets violates the Twelve-Factor app. It is preferred to handle this during compilation in the build stage. *Tip: The Rails asset pipeline can be configured to package assets during the build stage.*
+Moreover, any language-specific packaging that utilizes the filesystem as a cache for compiled assets violates the Twelve-Factor app. It is preferred to handle this during compilation in the build stage. _Tip: The Rails asset pipeline can be configured to package assets during the build stage._
 
 Certain web systems rely on "sticky sessions" where user session data is cached in the memory of the app’s process, expecting subsequent requests from the same visitor to be routed to the same process. This practice also violates the Twelve-Factor app. Session state data is better suited for a datastore offering time expiration, such as Memcached or Redis.
