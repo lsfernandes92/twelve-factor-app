@@ -197,9 +197,27 @@ The app's event stream can be directed to a file or monitored in real-time using
 - Large-scale graphing of trends(such as the requests per minute);
 - Active alerting according to user-defined heuristics(such as an alert when the quantity of errors per minute exceeds a certain threshold)
 
+## XII. Admin processes
+
+### Run admin/management tasks as one-off processes
+
+---
+
+Besides the app's regular business processes, developers frequently need to perform one-off administrative or maintenance tasks for the app, such as:
+
+- Running database migrations;
+- Running a console to run arbitrary code or inspect the app's model against the live database;
+- Running one-time scripts committed into the app's repo(e.g. `php scripts/fix_bad_records.php`)
+
+Those tasks should operate within the same environment as the regular long-running processes of the app. They execute against a release, utilizing the identical codebase and configuration. Moreover, to prevent synchronization issues, the code must be shipped alongside the application code.
+
+All process types should employ the same dependency isolation techniques. For instance, if the Ruby web process utilizes the command `bundle exec thin start`, the database migration should also use `bundle exec rails db:migrate`.
+
+The Twelve-Factor app strongly advocates for languages that offer a built-in REPL shell, simplifying the execution of one-off administrative scripts. During development, developers can run these scripts by accessing a local console within the app's container. In a production deployment, developers can access the app's console via `SSH` or another mechanism provided by the execution environment, and then execute the script.
 
 ## Conclusion
 
+- The application of those rules is better to "prepare-to-be-ready" your SaaS
 - Those rules doesn't make sense in small projects
 - Those rules are suggested for a better SaaS service, but they are not require.
   You can apply the one that make sense to you or to your project.
