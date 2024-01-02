@@ -139,11 +139,11 @@ Furthermore, this approach signifies that any service can be exported by port bi
 
 ---
 
-Web application has various process-execution forms. PHP, for example, processes function as child processes of Apache, starting based on request volume, while Java processes operate within a massive JVM uberprocess, managing concurrency internally through threads. These running processes are minimally visible to app developers. **In the context of the twelve-factor app, processes are crucial and they are a first class citizen**, drawing inspiration from the unix process model for service daemons. This model allows developers to allocate different workloads to specific process types, such as handling HTTP requests through web processes and long-running tasks through worker processes.
+Web applications have various process execution forms. PHP, for example, processes function as child processes of Apache, starting based on request volume, while Java processes operate within a massive JVM uberprocess, managing concurrency internally through threads. These running processes are minimally visible to app developers. **In the context of the twelve-factor app, processes are crucial and they are a first-class citizen**, drawing inspiration from the unix process model for service daemons. This model allows developers to allocate different workloads to specific process types, such as handling HTTP requests through web processes and long-running tasks through worker processes.
 
 Moreover, while individual processes can handle internal multiplexing via threads or asynchronous/event-driven models, vertical scaling of an individual VM has limitations. The process model excels in scaling out, as the share-nothing, horizontally partitionable nature of twelve-factor app processes facilitates simple and reliable addition of concurrency.
 
-Furthermore, the text emphasizes that twelve-factor app processes should refrain from daemonizing or writing PID files. Instead, reliance on the operating system’s process manager (like systemd or cloud platform-based distributed process managers) or tools such as Foreman during development is encouraged. These tools effectively manage output streams, handle crashed processes, and address user-initiated restarts and shutdowns.
+Furthermore, the text emphasizes that twelve-factor app processes should refrain from daemonizing or writing PID files. Instead, reliance on the operating system’s process manager (like `systemd`` or cloud platform-based distributed process managers) or tools such as `Foreman` during development is encouraged. These tools effectively manage output streams, handle crashed processes and address user-initiated restarts and shutdowns.
 
 ## IX. Disposability
 
