@@ -155,7 +155,7 @@ Furthermore, the text emphasizes that twelve-factor app processes should refrain
 
 Efforts should be made to **minimize the startup time of processes.** Swift startups provide greater agility for the release process and scaling up, contributing to robustness as the process manager can easily transfer processes to new physical machines when needed.
 
-**Processes shut down gracefully when they receive a `SIGTERM`** signal from the process manager. In the case of a web process, this entails ceasing to listen on the service port (rejecting new requests), allowing ongoing requests to complete, and then exiting. For instance, in the case of a worker process, graceful shutdown involves returning the current job to the work queue. In RabbitMQ, a worker can send a NACK to accomplish this.
+**Processes shut down gracefully when they receive a `SIGTERM`** signal from the process manager. In the case of a web process, this entails ceasing to listen on the service port (rejecting new requests), allowing ongoing requests to be completed, and then exiting. For instance, in the case of a worker process, graceful shutdown involves returning the current job to the work queue. In `RabbitMQ`, a worker can send a NACK to accomplish this.
 
 Processes should also be resilient against abrupt termination, which could result from hardware failures. Although less common than graceful shutdowns with SIGTERM, such incidents can occur. An advisable strategy involves utilizing a robust queueing backend like Beanstalkd, which returns jobs to the queue upon client disconnection or timeouts. In any scenario, a twelve-factor app is structured to handle unexpected, non-graceful terminations. The crash-only design embodies this principle to its logical conclusion.
 
@@ -169,7 +169,7 @@ Historically, significant disparities have existed between development and produ
 
 - The Time Gap: Code often takes days, weeks, or even months to reach production, whereas it should ideally be deployed within hours or minutes.
 - The Personnel Gap: Developers create code while DevOps engineers handle deployment. Ideally, developers would be closely engaged in deploying and observing its behavior in the production environment.
-- The Tools Gap: Local development setups might utilize stacks like Nginx, SQLite, and OS X, while production environments employ Apache, MySQL, and Linux. Let's keep development and production as similar as possible.
+- The Tools Gap: Local development setups might utilize stacks like `Nginx`, `SQLite`, and OS X, while production environments employ `Apache`, `MySQL`, and Linux. Let's keep development and production as similar as possible.
 
 **The Twelve-Factor app is engineered for continuous deployment, aiming to narrow the gap between these environments.**
 
